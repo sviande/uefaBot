@@ -646,8 +646,11 @@ type Winner struct {
 
 func fetchMatches() (map[string]MatchInfo, error) {
 	params := url.Values{}
-	params.Add("fromDate", "2021-06-09")
-	params.Add("toDate", "2021-06-10")
+	today := time.Now()
+	dateLayout := "2006-01-02"
+	tomorrow := today.Add(24 * time.Hour)
+	params.Add("fromDate", today.Format(dateLayout))
+	params.Add("toDate", tomorrow.Format(dateLayout))
 	params.Add("offset", "0")
 	params.Add("limit", "100")
 	resp, err := http.Get("https://match.uefa.com/v2/matches?" + params.Encode())
