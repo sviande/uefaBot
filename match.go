@@ -1,6 +1,11 @@
 package main
 
-import "time"
+import (
+	"encoding/json"
+	"net/http"
+	"net/url"
+	"time"
+)
 
 //Match struct
 type Match struct {
@@ -638,4 +643,46 @@ type Match struct {
 	} `json:"stadium"`
 	Status string `json:"status"`
 	Type   string `json:"type"`
+}
+
+func fetchMatches() ([]Match, error) {
+	params := url.Values{}
+	params.Add("fromDate", "2021-06-09")
+	params.Add("toDate", "2021-06-10")
+	params.Add("offset", "0")
+	params.Add("limit", "100")
+	resp, err := http.Get("https://match.uefa.com/v2/matches?" + params.Encode())
+
+	matches := []Match{}
+	if err != nil {
+		return matches, err
+	}
+
+	defer resp.Body.Close()
+
+	err = json.NewDecoder(resp.Body).Decode(&matches)
+	if err != nil {
+		return matches, err
+	}
+
+	return matches, err
+}
+
+type EventType int
+
+const (
+	START = iota
+	END   = iota
+	GOAL  = iota
+)
+
+type MatchEvent struct {
+	Event EventType
+	Label string
+}
+
+func compareNewInfos(current, previous []Match) []MatchEvent {
+	return []MatchEvent{
+		{START, "Match start"},
+	}
 }
