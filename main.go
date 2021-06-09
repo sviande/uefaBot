@@ -8,16 +8,26 @@ import (
 	"time"
 )
 
-func monitorMatches(previousMatches []Match) []Match {
+func monitorMatches(previousMatches map[string]MatchInfo) map[string]MatchInfo {
 	currentMatches, err := fetchMatches()
 	if err != nil {
 		log.Printf("Monitor failed, %v", err)
 	}
 
 	newEvents := compareNewInfos(previousMatches, currentMatches)
-	log.Printf("%v", newEvents)
+	processEvents(newEvents)
 
 	return currentMatches
+}
+
+func processEvents(events []MatchEvent) {
+	if len(events) == 0 {
+		return
+	}
+
+	for _, event := range events {
+		log.Printf("New event %d: label: %s", event.Event, event.Label)
+	}
 }
 
 func main() {
@@ -28,7 +38,7 @@ func main() {
 		os.Exit(0)
 	}()
 
-	previousMatches := []Match{}
+	previousMatches := make(map[string]MatchInfo)
 
 	ticker := time.NewTicker(1 * time.Minute)
 	go func() {

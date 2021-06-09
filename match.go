@@ -2,779 +2,649 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
 	"time"
 )
 
-//Match struct
+type MatchInfo struct {
+	AwayTeam          AwayTeam     `json:"awayTeam"`
+	BehindClosedDoors bool         `json:"behindClosedDoors"`
+	Competition       Competition  `json:"competition"`
+	Condition         Condition    `json:"condition"`
+	FullTimeAt        time.Time    `json:"fullTimeAt"`
+	Group             Group        `json:"group"`
+	HomeTeam          HomeTeam     `json:"homeTeam"`
+	ID                string       `json:"id"`
+	KickOffTime       KickOffTime  `json:"kickOffTime"`
+	LineupStatus      string       `json:"lineupStatus"`
+	MatchAttendance   int          `json:"matchAttendance"`
+	Matchday          Matchday     `json:"matchday"`
+	PlayerEvents      PlayerEvents `json:"playerEvents"`
+	Referees          []Referees   `json:"referees"`
+	Round             Round        `json:"round"`
+	Score             Score        `json:"score"`
+	SeasonYear        string       `json:"seasonYear"`
+	SessionNumber     int          `json:"sessionNumber"`
+	Stadium           Stadium      `json:"stadium"`
+	Status            string       `json:"status"`
+	Type              string       `json:"type"`
+	Winner            Winner       `json:"winner"`
+}
+type CountryName struct {
+	En string `json:"EN"`
+	Fr string `json:"FR"`
+	De string `json:"DE"`
+	Es string `json:"ES"`
+	Pt string `json:"PT"`
+	It string `json:"IT"`
+	Ru string `json:"RU"`
+	Ja string `json:"JA"`
+	Zh string `json:"ZH"`
+	Hu string `json:"HU"`
+	Ro string `json:"RO"`
+	Da string `json:"DA"`
+	Nl string `json:"NL"`
+	Az string `json:"AZ"`
+}
+type DisplayName struct {
+	En string `json:"EN"`
+	Fr string `json:"FR"`
+	De string `json:"DE"`
+	Es string `json:"ES"`
+	Pt string `json:"PT"`
+	It string `json:"IT"`
+	Ru string `json:"RU"`
+	Ja string `json:"JA"`
+	Zh string `json:"ZH"`
+	Hu string `json:"HU"`
+	Ro string `json:"RO"`
+	Da string `json:"DA"`
+	Nl string `json:"NL"`
+	Az string `json:"AZ"`
+}
+type DisplayOfficialName struct {
+	En string `json:"EN"`
+	Fr string `json:"FR"`
+	De string `json:"DE"`
+	Es string `json:"ES"`
+	Pt string `json:"PT"`
+	It string `json:"IT"`
+	Ru string `json:"RU"`
+	Ja string `json:"JA"`
+	Zh string `json:"ZH"`
+	Hu string `json:"HU"`
+	Ro string `json:"RO"`
+	Da string `json:"DA"`
+	Nl string `json:"NL"`
+	Az string `json:"AZ"`
+}
+type DisplayTeamCode struct {
+	En string `json:"EN"`
+	Fr string `json:"FR"`
+	De string `json:"DE"`
+	Es string `json:"ES"`
+	Pt string `json:"PT"`
+	It string `json:"IT"`
+	Ru string `json:"RU"`
+	Ja string `json:"JA"`
+	Zh string `json:"ZH"`
+	Hu string `json:"HU"`
+	Ro string `json:"RO"`
+	Da string `json:"DA"`
+	Nl string `json:"NL"`
+	Az string `json:"AZ"`
+}
+type AwayTeamTranslations struct {
+	CountryName         CountryName         `json:"countryName"`
+	DisplayName         DisplayName         `json:"displayName"`
+	DisplayOfficialName DisplayOfficialName `json:"displayOfficialName"`
+	DisplayTeamCode     DisplayTeamCode     `json:"displayTeamCode"`
+}
+type AwayTeam struct {
+	AssociationLogoURL string               `json:"associationLogoUrl"`
+	BigLogoURL         string               `json:"bigLogoUrl"`
+	CountryCode        string               `json:"countryCode"`
+	ID                 string               `json:"id"`
+	IDProvider         string               `json:"idProvider"`
+	InternationalName  string               `json:"internationalName"`
+	IsPlaceHolder      bool                 `json:"isPlaceHolder"`
+	LogoURL            string               `json:"logoUrl"`
+	MediumLogoURL      string               `json:"mediumLogoUrl"`
+	TeamCode           string               `json:"teamCode"`
+	TeamTypeDetail     string               `json:"teamTypeDetail"`
+	Translations       AwayTeamTranslations `json:"translations"`
+	TypeIsNational     bool                 `json:"typeIsNational"`
+	TypeTeam           string               `json:"typeTeam"`
+}
+type Images struct {
+	FullLogo string `json:"FULL_LOGO"`
+}
+type MetaData struct {
+	Name string `json:"name"`
+}
+type Name struct {
+	En string `json:"EN"`
+	Fr string `json:"FR"`
+	De string `json:"DE"`
+	Es string `json:"ES"`
+	Pt string `json:"PT"`
+	It string `json:"IT"`
+	Ru string `json:"RU"`
+	Ja string `json:"JA"`
+	Zh string `json:"ZH"`
+	Hu string `json:"HU"`
+	Ro string `json:"RO"`
+	Da string `json:"DA"`
+	Nl string `json:"NL"`
+	Az string `json:"AZ"`
+}
+type QualifyingName struct {
+	En string `json:"EN"`
+	Fr string `json:"FR"`
+	De string `json:"DE"`
+	Es string `json:"ES"`
+	Pt string `json:"PT"`
+	It string `json:"IT"`
+	Ru string `json:"RU"`
+	Ja string `json:"JA"`
+	Zh string `json:"ZH"`
+	Hu string `json:"HU"`
+	Ro string `json:"RO"`
+	Da string `json:"DA"`
+	Nl string `json:"NL"`
+	Az string `json:"AZ"`
+}
+type TournamentName struct {
+	En string `json:"EN"`
+	Fr string `json:"FR"`
+	De string `json:"DE"`
+	Es string `json:"ES"`
+	Pt string `json:"PT"`
+	It string `json:"IT"`
+	Ru string `json:"RU"`
+	Ja string `json:"JA"`
+	Zh string `json:"ZH"`
+	Hu string `json:"HU"`
+	Ro string `json:"RO"`
+	Da string `json:"DA"`
+	Nl string `json:"NL"`
+	Az string `json:"AZ"`
+}
+type CompetionTranslations struct {
+	Name           Name           `json:"name"`
+	QualifyingName QualifyingName `json:"qualifyingName"`
+	TournamentName TournamentName `json:"tournamentName"`
+}
+type Competition struct {
+	Age          string                `json:"age"`
+	Code         string                `json:"code"`
+	ID           string                `json:"id"`
+	Images       Images                `json:"images"`
+	MetaData     MetaData              `json:"metaData"`
+	Region       string                `json:"region"`
+	Sex          string                `json:"sex"`
+	SportsType   string                `json:"sportsType"`
+	TeamCategory string                `json:"teamCategory"`
+	Translations CompetionTranslations `json:"translations"`
+	Type         string                `json:"type"`
+}
+type PitchConditionName struct {
+	En string `json:"EN"`
+	Fr string `json:"FR"`
+	De string `json:"DE"`
+	Es string `json:"ES"`
+	Pt string `json:"PT"`
+	It string `json:"IT"`
+	Ru string `json:"RU"`
+	Ja string `json:"JA"`
+	Zh string `json:"ZH"`
+	Hu string `json:"HU"`
+	Ro string `json:"RO"`
+	Da string `json:"DA"`
+	Nl string `json:"NL"`
+	Az string `json:"AZ"`
+}
+type WeatherConditionName struct {
+	En string `json:"EN"`
+	Fr string `json:"FR"`
+	De string `json:"DE"`
+	Es string `json:"ES"`
+	Pt string `json:"PT"`
+	It string `json:"IT"`
+	Ru string `json:"RU"`
+	Ja string `json:"JA"`
+	Zh string `json:"ZH"`
+	Hu string `json:"HU"`
+	Ro string `json:"RO"`
+	Da string `json:"DA"`
+	Nl string `json:"NL"`
+	Az string `json:"AZ"`
+}
+type ConditionTranslations struct {
+	PitchConditionName   PitchConditionName   `json:"pitchConditionName"`
+	WeatherConditionName WeatherConditionName `json:"weatherConditionName"`
+}
+type Condition struct {
+	PitchCondition   string                `json:"pitchCondition"`
+	Temperature      int                   `json:"temperature"`
+	Translations     ConditionTranslations `json:"translations"`
+	WeatherCondition string                `json:"weatherCondition"`
+	WindSpeed        int                   `json:"windSpeed"`
+}
+type GroupMetaData struct {
+	GroupName      string `json:"groupName"`
+	GroupShortName string `json:"groupShortName"`
+}
+type ShortName struct {
+	En string `json:"EN"`
+	Fr string `json:"FR"`
+	De string `json:"DE"`
+	Es string `json:"ES"`
+	Pt string `json:"PT"`
+	It string `json:"IT"`
+	Ru string `json:"RU"`
+	Ja string `json:"JA"`
+	Zh string `json:"ZH"`
+	Hu string `json:"HU"`
+	Ro string `json:"RO"`
+	Da string `json:"DA"`
+	Nl string `json:"NL"`
+	Az string `json:"AZ"`
+}
+type GroupTranslations struct {
+	Name      Name      `json:"name"`
+	ShortName ShortName `json:"shortName"`
+}
+type Group struct {
+	CompetitionID string            `json:"competitionId"`
+	ID            string            `json:"id"`
+	MetaData      GroupMetaData     `json:"metaData"`
+	Order         int               `json:"order"`
+	Phase         string            `json:"phase"`
+	RoundID       string            `json:"roundId"`
+	SeasonYear    string            `json:"seasonYear"`
+	Translations  GroupTranslations `json:"translations"`
+	Type          string            `json:"type"`
+}
+type HomeTeamTranslations struct {
+	CountryName         CountryName         `json:"countryName"`
+	DisplayName         DisplayName         `json:"displayName"`
+	DisplayOfficialName DisplayOfficialName `json:"displayOfficialName"`
+	DisplayTeamCode     DisplayTeamCode     `json:"displayTeamCode"`
+}
+type HomeTeam struct {
+	AssociationLogoURL string               `json:"associationLogoUrl"`
+	BigLogoURL         string               `json:"bigLogoUrl"`
+	CountryCode        string               `json:"countryCode"`
+	ID                 string               `json:"id"`
+	IDProvider         string               `json:"idProvider"`
+	InternationalName  string               `json:"internationalName"`
+	IsPlaceHolder      bool                 `json:"isPlaceHolder"`
+	LogoURL            string               `json:"logoUrl"`
+	MediumLogoURL      string               `json:"mediumLogoUrl"`
+	TeamCode           string               `json:"teamCode"`
+	TeamTypeDetail     string               `json:"teamTypeDetail"`
+	Translations       HomeTeamTranslations `json:"translations"`
+	TypeIsNational     bool                 `json:"typeIsNational"`
+	TypeTeam           string               `json:"typeTeam"`
+}
+type KickOffTime struct {
+	Date             string    `json:"date"`
+	DateTime         time.Time `json:"dateTime"`
+	UtcOffsetInHours int       `json:"utcOffsetInHours"`
+}
+type LongName struct {
+	En string `json:"EN"`
+	Fr string `json:"FR"`
+	De string `json:"DE"`
+	Es string `json:"ES"`
+	Pt string `json:"PT"`
+	It string `json:"IT"`
+	Ru string `json:"RU"`
+	Ja string `json:"JA"`
+	Zh string `json:"ZH"`
+	Hu string `json:"HU"`
+	Ro string `json:"RO"`
+	Da string `json:"DA"`
+	Nl string `json:"NL"`
+	Az string `json:"AZ"`
+}
+type MatchdayTranslations struct {
+	LongName LongName `json:"longName"`
+	Name     Name     `json:"name"`
+}
+type Matchday struct {
+	CompetitionID  string               `json:"competitionId"`
+	DateFrom       string               `json:"dateFrom"`
+	DateTo         string               `json:"dateTo"`
+	ID             string               `json:"id"`
+	LongName       string               `json:"longName"`
+	Name           string               `json:"name"`
+	RoundID        string               `json:"roundId"`
+	SeasonYear     string               `json:"seasonYear"`
+	SequenceNumber string               `json:"sequenceNumber"`
+	Translations   MatchdayTranslations `json:"translations"`
+	Type           string               `json:"type"`
+}
+type ScorersImages struct {
+	PlayerCelebrating string `json:"PLAYER_CELEBRATING"`
+}
+type FieldPosition struct {
+	En string `json:"EN"`
+	Fr string `json:"FR"`
+	De string `json:"DE"`
+	Es string `json:"ES"`
+	Pt string `json:"PT"`
+	It string `json:"IT"`
+	Ru string `json:"RU"`
+	Ja string `json:"JA"`
+	Zh string `json:"ZH"`
+	Hu string `json:"HU"`
+	Ro string `json:"RO"`
+	Da string `json:"DA"`
+	Nl string `json:"NL"`
+	Az string `json:"AZ"`
+}
+type FirstName struct {
+	En string `json:"EN"`
+	Fr string `json:"FR"`
+	De string `json:"DE"`
+	Es string `json:"ES"`
+	Pt string `json:"PT"`
+	It string `json:"IT"`
+	Ru string `json:"RU"`
+	Ja string `json:"JA"`
+	Zh string `json:"ZH"`
+	Hu string `json:"HU"`
+	Ro string `json:"RO"`
+	Da string `json:"DA"`
+	Nl string `json:"NL"`
+	Az string `json:"AZ"`
+}
+type LastName struct {
+	En string `json:"EN"`
+	Fr string `json:"FR"`
+	De string `json:"DE"`
+	Es string `json:"ES"`
+	Pt string `json:"PT"`
+	It string `json:"IT"`
+	Ru string `json:"RU"`
+	Ja string `json:"JA"`
+	Zh string `json:"ZH"`
+	Hu string `json:"HU"`
+	Ro string `json:"RO"`
+	Da string `json:"DA"`
+	Nl string `json:"NL"`
+	Az string `json:"AZ"`
+}
+type PlayerTranslations struct {
+	CountryName   CountryName   `json:"countryName"`
+	FieldPosition FieldPosition `json:"fieldPosition"`
+	FirstName     FirstName     `json:"firstName"`
+	LastName      LastName      `json:"lastName"`
+	Name          Name          `json:"name"`
+	ShortName     ShortName     `json:"shortName"`
+}
+type Player struct {
+	Age                   string             `json:"age"`
+	BirthDate             string             `json:"birthDate"`
+	CountryCode           string             `json:"countryCode"`
+	DetailedFieldPosition string             `json:"detailedFieldPosition"`
+	FieldPosition         string             `json:"fieldPosition"`
+	Height                int                `json:"height"`
+	ID                    string             `json:"id"`
+	ImageURL              string             `json:"imageUrl"`
+	InternationalName     string             `json:"internationalName"`
+	Translations          PlayerTranslations `json:"translations"`
+	Weight                int                `json:"weight"`
+}
+type Time struct {
+	Minute int `json:"minute"`
+	Second int `json:"second"`
+}
+type TotalScore struct {
+	Away int `json:"away"`
+	Home int `json:"home"`
+}
+type Scorers struct {
+	GoalType       string        `json:"goalType"`
+	ID             string        `json:"id"`
+	Images         ScorersImages `json:"images"`
+	Player         Player        `json:"player"`
+	TeamID         string        `json:"teamId"`
+	TeamIDProvider string        `json:"teamIdProvider"`
+	Time           Time          `json:"time"`
+	TotalScore     TotalScore    `json:"totalScore"`
+}
+type PlayerEvents struct {
+	Scorers []Scorers `json:"scorers"`
+}
+type RefereesImages struct {
+	SmallSquare string `json:"SMALL_SQUARE"`
+}
+type Translations struct {
+	CountryName CountryName `json:"countryName"`
+	FirstName   FirstName   `json:"firstName"`
+	LastName    LastName    `json:"lastName"`
+	Name        Name        `json:"name"`
+	ShortName   ShortName   `json:"shortName"`
+}
+type Person struct {
+	CountryCode  string       `json:"countryCode"`
+	ID           string       `json:"id"`
+	Translations Translations `json:"translations"`
+}
+type RoleName struct {
+	En string `json:"EN"`
+	Fr string `json:"FR"`
+	De string `json:"DE"`
+	Es string `json:"ES"`
+	Pt string `json:"PT"`
+	It string `json:"IT"`
+	Ru string `json:"RU"`
+	Ja string `json:"JA"`
+	Zh string `json:"ZH"`
+	Hu string `json:"HU"`
+	Ro string `json:"RO"`
+	Da string `json:"DA"`
+	Nl string `json:"NL"`
+	Az string `json:"AZ"`
+}
+type RefereesTranslations struct {
+	RoleName RoleName `json:"roleName"`
+}
+type Referees struct {
+	Images       RefereesImages       `json:"images"`
+	Person       Person               `json:"person"`
+	Role         string               `json:"role"`
+	Translations RefereesTranslations `json:"translations"`
+}
+type RoundMetaData struct {
+	Name string `json:"name"`
+	Type string `json:"type"`
+}
+type Abbreviation struct {
+	En string `json:"EN"`
+	Fr string `json:"FR"`
+	De string `json:"DE"`
+	Es string `json:"ES"`
+	Pt string `json:"PT"`
+	It string `json:"IT"`
+	Ru string `json:"RU"`
+	Ja string `json:"JA"`
+	Zh string `json:"ZH"`
+	Hu string `json:"HU"`
+	Ro string `json:"RO"`
+	Da string `json:"DA"`
+	Nl string `json:"NL"`
+	Az string `json:"AZ"`
+}
+type RoundTranslations struct {
+	Abbreviation Abbreviation `json:"abbreviation"`
+	Name         Name         `json:"name"`
+	ShortName    ShortName    `json:"shortName"`
+}
+type Round struct {
+	Active             bool              `json:"active"`
+	CompetitionID      string            `json:"competitionId"`
+	DateFrom           string            `json:"dateFrom"`
+	DateTo             string            `json:"dateTo"`
+	GroupCount         int               `json:"groupCount"`
+	ID                 string            `json:"id"`
+	MetaData           RoundMetaData     `json:"metaData"`
+	Mode               string            `json:"mode"`
+	ModeDetail         string            `json:"modeDetail"`
+	OrderInCompetition int               `json:"orderInCompetition"`
+	Phase              string            `json:"phase"`
+	SeasonYear         string            `json:"seasonYear"`
+	StadiumNameType    string            `json:"stadiumNameType"`
+	Status             string            `json:"status"`
+	TeamCount          int               `json:"teamCount"`
+	Translations       RoundTranslations `json:"translations"`
+}
+type Regular struct {
+	Away int `json:"away"`
+	Home int `json:"home"`
+}
+type Total struct {
+	Away int `json:"away"`
+	Home int `json:"home"`
+}
+type Score struct {
+	Regular Regular `json:"regular"`
+	Total   Total   `json:"total"`
+}
+type CityTranslations struct {
+	Name Name `json:"name"`
+}
+type City struct {
+	CountryCode  string           `json:"countryCode"`
+	ID           string           `json:"id"`
+	Translations CityTranslations `json:"translations"`
+}
+type Geolocation struct {
+	Latitude  float64 `json:"latitude"`
+	Longitude float64 `json:"longitude"`
+}
+type StadiumImages struct {
+	MediumWide     string `json:"MEDIUM_WIDE"`
+	LargeUltraWide string `json:"LARGE_ULTRA_WIDE"`
+}
+type MediaName struct {
+	En string `json:"EN"`
+	Fr string `json:"FR"`
+	De string `json:"DE"`
+	Es string `json:"ES"`
+	Pt string `json:"PT"`
+	It string `json:"IT"`
+	Ru string `json:"RU"`
+	Ja string `json:"JA"`
+	Zh string `json:"ZH"`
+	Hu string `json:"HU"`
+	Ro string `json:"RO"`
+	Da string `json:"DA"`
+	Nl string `json:"NL"`
+	Az string `json:"AZ"`
+}
+type OfficialName struct {
+	En string `json:"EN"`
+	Fr string `json:"FR"`
+	De string `json:"DE"`
+	Es string `json:"ES"`
+	Pt string `json:"PT"`
+	It string `json:"IT"`
+	Ru string `json:"RU"`
+	Ja string `json:"JA"`
+	Zh string `json:"ZH"`
+	Hu string `json:"HU"`
+	Ro string `json:"RO"`
+	Da string `json:"DA"`
+	Nl string `json:"NL"`
+	Az string `json:"AZ"`
+}
+type SpecialEventsName struct {
+	En string `json:"EN"`
+	Fr string `json:"FR"`
+	De string `json:"DE"`
+	Es string `json:"ES"`
+	Pt string `json:"PT"`
+	It string `json:"IT"`
+	Ru string `json:"RU"`
+	Ja string `json:"JA"`
+	Zh string `json:"ZH"`
+	Hu string `json:"HU"`
+	Ro string `json:"RO"`
+	Da string `json:"DA"`
+	Nl string `json:"NL"`
+	Az string `json:"AZ"`
+}
+type SponsorName struct {
+	En string `json:"EN"`
+	Fr string `json:"FR"`
+	De string `json:"DE"`
+	Es string `json:"ES"`
+	Pt string `json:"PT"`
+	It string `json:"IT"`
+	Ru string `json:"RU"`
+	Ja string `json:"JA"`
+	Zh string `json:"ZH"`
+	Hu string `json:"HU"`
+	Ro string `json:"RO"`
+	Da string `json:"DA"`
+	Nl string `json:"NL"`
+	Az string `json:"AZ"`
+}
+type StadiumTranslations struct {
+	MediaName         MediaName         `json:"mediaName"`
+	Name              Name              `json:"name"`
+	OfficialName      OfficialName      `json:"officialName"`
+	SpecialEventsName SpecialEventsName `json:"specialEventsName"`
+	SponsorName       SponsorName       `json:"sponsorName"`
+}
+type Stadium struct {
+	Address      string              `json:"address"`
+	Capacity     int                 `json:"capacity"`
+	City         City                `json:"city"`
+	CountryCode  string              `json:"countryCode"`
+	Geolocation  Geolocation         `json:"geolocation"`
+	ID           string              `json:"id"`
+	Images       StadiumImages       `json:"images"`
+	OpeningDate  string              `json:"openingDate"`
+	Translations StadiumTranslations `json:"translations"`
+}
+type TeamTranslations struct {
+	CountryName         CountryName         `json:"countryName"`
+	DisplayName         DisplayName         `json:"displayName"`
+	DisplayOfficialName DisplayOfficialName `json:"displayOfficialName"`
+	DisplayTeamCode     DisplayTeamCode     `json:"displayTeamCode"`
+}
+type Team struct {
+	AssociationLogoURL string           `json:"associationLogoUrl"`
+	BigLogoURL         string           `json:"bigLogoUrl"`
+	CountryCode        string           `json:"countryCode"`
+	ID                 string           `json:"id"`
+	IDProvider         string           `json:"idProvider"`
+	InternationalName  string           `json:"internationalName"`
+	IsPlaceHolder      bool             `json:"isPlaceHolder"`
+	LogoURL            string           `json:"logoUrl"`
+	MediumLogoURL      string           `json:"mediumLogoUrl"`
+	TeamCode           string           `json:"teamCode"`
+	TeamTypeDetail     string           `json:"teamTypeDetail"`
+	Translations       TeamTranslations `json:"translations"`
+	TypeIsNational     bool             `json:"typeIsNational"`
+	TypeTeam           string           `json:"typeTeam"`
+}
 type Match struct {
-	AwayTeam struct {
-		AssociationLogoURL string `json:"associationLogoUrl"`
-		BigLogoURL         string `json:"bigLogoUrl"`
-		CountryCode        string `json:"countryCode"`
-		ID                 string `json:"id"`
-		IDProvider         string `json:"idProvider"`
-		InternationalName  string `json:"internationalName"`
-		IsPlaceHolder      bool   `json:"isPlaceHolder"`
-		LogoURL            string `json:"logoUrl"`
-		MediumLogoURL      string `json:"mediumLogoUrl"`
-		TeamCode           string `json:"teamCode"`
-		TeamTypeDetail     string `json:"teamTypeDetail"`
-		Translations       struct {
-			CountryName struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"countryName"`
-			DisplayName struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"displayName"`
-			DisplayOfficialName struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"displayOfficialName"`
-			DisplayTeamCode struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"displayTeamCode"`
-		} `json:"translations"`
-		TypeIsNational bool   `json:"typeIsNational"`
-		TypeTeam       string `json:"typeTeam"`
-	} `json:"awayTeam"`
-	BehindClosedDoors bool `json:"behindClosedDoors"`
-	Competition       struct {
-		Age    string `json:"age"`
-		Code   string `json:"code"`
-		ID     string `json:"id"`
-		Images struct {
-			FullLogo string `json:"FULL_LOGO"`
-		} `json:"images"`
-		MetaData struct {
-			Name string `json:"name"`
-		} `json:"metaData"`
-		Region       string `json:"region"`
-		Sex          string `json:"sex"`
-		SportsType   string `json:"sportsType"`
-		TeamCategory string `json:"teamCategory"`
-		Translations struct {
-			Name struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"name"`
-			QualifyingName struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"qualifyingName"`
-			TournamentName struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"tournamentName"`
-		} `json:"translations"`
-		Type string `json:"type"`
-	} `json:"competition"`
-	Group struct {
-		CompetitionID string `json:"competitionId"`
-		ID            string `json:"id"`
-		MetaData      struct {
-			GroupName      string `json:"groupName"`
-			GroupShortName string `json:"groupShortName"`
-		} `json:"metaData"`
-		Order        int    `json:"order"`
-		Phase        string `json:"phase"`
-		RoundID      string `json:"roundId"`
-		SeasonYear   string `json:"seasonYear"`
-		Translations struct {
-			Name struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"name"`
-			ShortName struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"shortName"`
-		} `json:"translations"`
-		Type string `json:"type"`
-	} `json:"group"`
-	HomeTeam struct {
-		AssociationLogoURL string `json:"associationLogoUrl"`
-		BigLogoURL         string `json:"bigLogoUrl"`
-		CountryCode        string `json:"countryCode"`
-		ID                 string `json:"id"`
-		IDProvider         string `json:"idProvider"`
-		InternationalName  string `json:"internationalName"`
-		IsPlaceHolder      bool   `json:"isPlaceHolder"`
-		LogoURL            string `json:"logoUrl"`
-		MediumLogoURL      string `json:"mediumLogoUrl"`
-		TeamCode           string `json:"teamCode"`
-		TeamTypeDetail     string `json:"teamTypeDetail"`
-		Translations       struct {
-			CountryName struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"countryName"`
-			DisplayName struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"displayName"`
-			DisplayOfficialName struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"displayOfficialName"`
-			DisplayTeamCode struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"displayTeamCode"`
-		} `json:"translations"`
-		TypeIsNational bool   `json:"typeIsNational"`
-		TypeTeam       string `json:"typeTeam"`
-	} `json:"homeTeam"`
-	ID          string `json:"id"`
-	KickOffTime struct {
-		Date             string    `json:"date"`
-		DateTime         time.Time `json:"dateTime"`
-		UtcOffsetInHours int       `json:"utcOffsetInHours"`
-	} `json:"kickOffTime"`
-	LineupStatus string `json:"lineupStatus"`
-	MatchNumber  int    `json:"matchNumber"`
-	Matchday     struct {
-		CompetitionID  string `json:"competitionId"`
-		DateFrom       string `json:"dateFrom"`
-		DateTo         string `json:"dateTo"`
-		ID             string `json:"id"`
-		LongName       string `json:"longName"`
-		Name           string `json:"name"`
-		RoundID        string `json:"roundId"`
-		SeasonYear     string `json:"seasonYear"`
-		SequenceNumber string `json:"sequenceNumber"`
-		Translations   struct {
-			LongName struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"longName"`
-			Name struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"name"`
-		} `json:"translations"`
-		Type string `json:"type"`
-	} `json:"matchday"`
-	PlayerEvents struct {
-		Scorers []struct {
-			GoalType string `json:"goalType"`
-			ID       string `json:"id"`
-			Images   struct {
-				PlayerCelebrating string `json:"PLAYER_CELEBRATING"`
-			} `json:"images"`
-			Player struct {
-				Age                   string `json:"age"`
-				BirthDate             string `json:"birthDate"`
-				CountryCode           string `json:"countryCode"`
-				DetailedFieldPosition string `json:"detailedFieldPosition"`
-				FieldPosition         string `json:"fieldPosition"`
-				Height                int64  `json:"height"`
-				ID                    string `json:"id"`
-				ImageURL              string `json:"imageUrl"`
-				InternationalName     string `json:"internationalName"`
-				Translations          struct {
-					CountryName struct {
-						Az string `json:"AZ"`
-						Da string `json:"DA"`
-						De string `json:"DE"`
-						En string `json:"EN"`
-						Es string `json:"ES"`
-						Fr string `json:"FR"`
-						Hu string `json:"HU"`
-						It string `json:"IT"`
-						Ja string `json:"JA"`
-						Nl string `json:"NL"`
-						Pt string `json:"PT"`
-						Ro string `json:"RO"`
-						Ru string `json:"RU"`
-						Zh string `json:"ZH"`
-					} `json:"countryName"`
-					FieldPosition struct {
-						Az string `json:"AZ"`
-						Da string `json:"DA"`
-						De string `json:"DE"`
-						En string `json:"EN"`
-						Es string `json:"ES"`
-						Fr string `json:"FR"`
-						Hu string `json:"HU"`
-						It string `json:"IT"`
-						Ja string `json:"JA"`
-						Nl string `json:"NL"`
-						Pt string `json:"PT"`
-						Ro string `json:"RO"`
-						Ru string `json:"RU"`
-						Zh string `json:"ZH"`
-					} `json:"fieldPosition"`
-					FirstName struct {
-						Az string `json:"AZ"`
-						Da string `json:"DA"`
-						De string `json:"DE"`
-						En string `json:"EN"`
-						Es string `json:"ES"`
-						Fr string `json:"FR"`
-						Hu string `json:"HU"`
-						It string `json:"IT"`
-						Ja string `json:"JA"`
-						Nl string `json:"NL"`
-						Pt string `json:"PT"`
-						Ro string `json:"RO"`
-						Ru string `json:"RU"`
-						Zh string `json:"ZH"`
-					} `json:"firstName"`
-					LastName struct {
-						Az string `json:"AZ"`
-						Da string `json:"DA"`
-						De string `json:"DE"`
-						En string `json:"EN"`
-						Es string `json:"ES"`
-						Fr string `json:"FR"`
-						Hu string `json:"HU"`
-						It string `json:"IT"`
-						Ja string `json:"JA"`
-						Nl string `json:"NL"`
-						Pt string `json:"PT"`
-						Ro string `json:"RO"`
-						Ru string `json:"RU"`
-						Zh string `json:"ZH"`
-					} `json:"lastName"`
-					Name struct {
-						Az string `json:"AZ"`
-						Da string `json:"DA"`
-						De string `json:"DE"`
-						En string `json:"EN"`
-						Es string `json:"ES"`
-						Fr string `json:"FR"`
-						Hu string `json:"HU"`
-						It string `json:"IT"`
-						Ja string `json:"JA"`
-						Nl string `json:"NL"`
-						Pt string `json:"PT"`
-						Ro string `json:"RO"`
-						Ru string `json:"RU"`
-						Zh string `json:"ZH"`
-					} `json:"name"`
-					ShortName struct {
-						Az string `json:"AZ"`
-						Da string `json:"DA"`
-						De string `json:"DE"`
-						En string `json:"EN"`
-						Es string `json:"ES"`
-						Fr string `json:"FR"`
-						Hu string `json:"HU"`
-						It string `json:"IT"`
-						Ja string `json:"JA"`
-						Nl string `json:"NL"`
-						Pt string `json:"PT"`
-						Ro string `json:"RO"`
-						Ru string `json:"RU"`
-						Zh string `json:"ZH"`
-					} `json:"shortName"`
-				} `json:"translations"`
-				Weight int64 `json:"weight"`
-			} `json:"player"`
-			TeamID         string `json:"teamId"`
-			TeamIDProvider string `json:"teamIdProvider"`
-			Time           struct {
-				Minute int64 `json:"minute"`
-				Second int64 `json:"second"`
-			} `json:"time"`
-			TotalScore struct {
-				Away int64 `json:"away"`
-				Home int64 `json:"home"`
-			} `json:"totalScore"`
-		} `json:"scorers"`
-	} `json:"playerEvents"`
-	Referees []struct {
-		Images struct {
-			SmallSquare string `json:"SMALL_SQUARE"`
-		} `json:"images"`
-		Person struct {
-			CountryCode  string `json:"countryCode"`
-			ID           string `json:"id"`
-			Translations struct {
-				CountryName struct {
-					En string `json:"EN"`
-					Fr string `json:"FR"`
-					De string `json:"DE"`
-					Es string `json:"ES"`
-					Pt string `json:"PT"`
-					It string `json:"IT"`
-					Ru string `json:"RU"`
-					Ja string `json:"JA"`
-					Zh string `json:"ZH"`
-					Hu string `json:"HU"`
-					Ro string `json:"RO"`
-					Da string `json:"DA"`
-					Nl string `json:"NL"`
-					Az string `json:"AZ"`
-				} `json:"countryName"`
-				FirstName struct {
-					En string `json:"EN"`
-					Fr string `json:"FR"`
-					De string `json:"DE"`
-					Es string `json:"ES"`
-					Pt string `json:"PT"`
-					It string `json:"IT"`
-					Ru string `json:"RU"`
-					Ja string `json:"JA"`
-					Zh string `json:"ZH"`
-					Hu string `json:"HU"`
-					Ro string `json:"RO"`
-					Da string `json:"DA"`
-					Nl string `json:"NL"`
-					Az string `json:"AZ"`
-				} `json:"firstName"`
-				LastName struct {
-					En string `json:"EN"`
-					Fr string `json:"FR"`
-					De string `json:"DE"`
-					Es string `json:"ES"`
-					Pt string `json:"PT"`
-					It string `json:"IT"`
-					Ru string `json:"RU"`
-					Ja string `json:"JA"`
-					Zh string `json:"ZH"`
-					Hu string `json:"HU"`
-					Ro string `json:"RO"`
-					Da string `json:"DA"`
-					Nl string `json:"NL"`
-					Az string `json:"AZ"`
-				} `json:"lastName"`
-				Name struct {
-					En string `json:"EN"`
-					Fr string `json:"FR"`
-					De string `json:"DE"`
-					Es string `json:"ES"`
-					Pt string `json:"PT"`
-					It string `json:"IT"`
-					Ru string `json:"RU"`
-					Ja string `json:"JA"`
-					Zh string `json:"ZH"`
-					Hu string `json:"HU"`
-					Ro string `json:"RO"`
-					Da string `json:"DA"`
-					Nl string `json:"NL"`
-					Az string `json:"AZ"`
-				} `json:"name"`
-				ShortName struct {
-					En string `json:"EN"`
-					Fr string `json:"FR"`
-					De string `json:"DE"`
-					Es string `json:"ES"`
-					Pt string `json:"PT"`
-					It string `json:"IT"`
-					Ru string `json:"RU"`
-					Ja string `json:"JA"`
-					Zh string `json:"ZH"`
-					Hu string `json:"HU"`
-					Ro string `json:"RO"`
-					Da string `json:"DA"`
-					Nl string `json:"NL"`
-					Az string `json:"AZ"`
-				} `json:"shortName"`
-			} `json:"translations"`
-		} `json:"person"`
-		Role         string `json:"role"`
-		Translations struct {
-			RoleName struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"roleName"`
-		} `json:"translations"`
-	} `json:"referees"`
-	Round struct {
-		Active        bool   `json:"active"`
-		CompetitionID string `json:"competitionId"`
-		DateFrom      string `json:"dateFrom"`
-		DateTo        string `json:"dateTo"`
-		GroupCount    int    `json:"groupCount"`
-		ID            string `json:"id"`
-		MetaData      struct {
-			Name string `json:"name"`
-			Type string `json:"type"`
-		} `json:"metaData"`
-		Mode               string `json:"mode"`
-		ModeDetail         string `json:"modeDetail"`
-		OrderInCompetition int    `json:"orderInCompetition"`
-		Phase              string `json:"phase"`
-		SeasonYear         string `json:"seasonYear"`
-		SecondaryType      string `json:"secondaryType"`
-		StadiumNameType    string `json:"stadiumNameType"`
-		Status             string `json:"status"`
-		TeamCount          int    `json:"teamCount"`
-		Translations       struct {
-			Abbreviation struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"abbreviation"`
-			Name struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"name"`
-			ShortName struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"shortName"`
-		} `json:"translations"`
-	} `json:"round"`
-	SeasonYear    string `json:"seasonYear"`
-	SessionNumber int    `json:"sessionNumber"`
-	Stadium       struct {
-		Address  string `json:"address"`
-		Capacity int    `json:"capacity"`
-		City     struct {
-			CountryCode  string `json:"countryCode"`
-			ID           string `json:"id"`
-			Translations struct {
-				Name struct {
-					En string `json:"EN"`
-					Fr string `json:"FR"`
-					De string `json:"DE"`
-					Es string `json:"ES"`
-					Pt string `json:"PT"`
-					It string `json:"IT"`
-					Ru string `json:"RU"`
-					Ja string `json:"JA"`
-					Zh string `json:"ZH"`
-					Hu string `json:"HU"`
-					Ro string `json:"RO"`
-					Da string `json:"DA"`
-					Nl string `json:"NL"`
-					Az string `json:"AZ"`
-				} `json:"name"`
-			} `json:"translations"`
-		} `json:"city"`
-		CountryCode string `json:"countryCode"`
-		Geolocation struct {
-			Latitude  float64 `json:"latitude"`
-			Longitude float64 `json:"longitude"`
-		} `json:"geolocation"`
-		ID     string `json:"id"`
-		Images struct {
-			MediumWide     string `json:"MEDIUM_WIDE"`
-			LargeUltraWide string `json:"LARGE_ULTRA_WIDE"`
-		} `json:"images"`
-		OpeningDate  string `json:"openingDate"`
-		Translations struct {
-			MediaName struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"mediaName"`
-			Name struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"name"`
-			OfficialName struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"officialName"`
-			SpecialEventsName struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"specialEventsName"`
-			SponsorName struct {
-				En string `json:"EN"`
-				Fr string `json:"FR"`
-				De string `json:"DE"`
-				Es string `json:"ES"`
-				Pt string `json:"PT"`
-				It string `json:"IT"`
-				Ru string `json:"RU"`
-				Ja string `json:"JA"`
-				Zh string `json:"ZH"`
-				Hu string `json:"HU"`
-				Ro string `json:"RO"`
-				Da string `json:"DA"`
-				Nl string `json:"NL"`
-				Az string `json:"AZ"`
-			} `json:"sponsorName"`
-		} `json:"translations"`
-	} `json:"stadium"`
-	Status string `json:"status"`
-	Type   string `json:"type"`
+	Reason string `json:"reason"`
+	Team   Team   `json:"team"`
+}
+type Winner struct {
+	Match Match `json:"match"`
 }
 
-func fetchMatches() ([]Match, error) {
+func fetchMatches() (map[string]MatchInfo, error) {
 	params := url.Values{}
 	params.Add("fromDate", "2021-06-09")
 	params.Add("toDate", "2021-06-10")
@@ -782,19 +652,24 @@ func fetchMatches() ([]Match, error) {
 	params.Add("limit", "100")
 	resp, err := http.Get("https://match.uefa.com/v2/matches?" + params.Encode())
 
-	matches := []Match{}
+	mapMatches := make(map[string]MatchInfo)
 	if err != nil {
-		return matches, err
+		return mapMatches, err
 	}
 
 	defer resp.Body.Close()
 
+	matches := []MatchInfo{}
 	err = json.NewDecoder(resp.Body).Decode(&matches)
 	if err != nil {
-		return matches, err
+		return mapMatches, err
 	}
 
-	return matches, err
+	for _, match := range matches {
+		mapMatches[match.ID] = match
+	}
+
+	return mapMatches, err
 }
 
 type EventType int
@@ -805,13 +680,37 @@ const (
 	GOAL  = iota
 )
 
+type MatchStatus int
+
+const (
+	MatchUpcoming = "UPCOMING"
+	MatchLive     = "LIVE"
+	MatchFinished = "FINISHED"
+)
+
 type MatchEvent struct {
 	Event EventType
 	Label string
 }
 
-func compareNewInfos(current, previous []Match) []MatchEvent {
-	return []MatchEvent{
-		{START, "Match start"},
+func compareNewInfos(currentMap, previousMap map[string]MatchInfo) []MatchEvent {
+	events := []MatchEvent{}
+
+	for ID, currentMatch := range currentMap {
+		previous, exists := previousMap[ID]
+		if exists == false {
+			continue
+		}
+
+		if previous.Status == MatchUpcoming && currentMatch.Status == MatchLive {
+			label := fmt.Sprintf("Match %s : %s started", currentMatch.HomeTeam.InternationalName, currentMatch.AwayTeam.InternationalName)
+			newEvent := MatchEvent{
+				Event: START,
+				Label: label,
+			}
+			events = append(events, newEvent)
+		}
 	}
+
+	return events
 }

@@ -3,11 +3,25 @@ package main
 import "testing"
 
 func TestCompareNewInfos(t *testing.T) {
-	current := []Match{}
-	previous := []Match{}
+	current := make(map[string]MatchInfo)
+	current["test"] = MatchInfo{
+		ID:     "test",
+		Status: MatchLive,
+		AwayTeam: AwayTeam{
+			InternationalName: "awayTeam",
+		},
+		HomeTeam: HomeTeam{
+			InternationalName: "homeTeam",
+		},
+	}
+	previous := make(map[string]MatchInfo)
+	previous["test"] = MatchInfo{
+		ID:     "test",
+		Status: MatchUpcoming,
+	}
 	got := compareNewInfos(current, previous)
 	expected := []MatchEvent{
-		{START, "Match start"},
+		{START, "Match homeTeam : awayTeam started"},
 	}
 
 	if got[0].Event != expected[0].Event {
