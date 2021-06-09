@@ -21,10 +21,10 @@ type MatchInfo struct {
 	LineupStatus      string       `json:"lineupStatus"`
 	MatchAttendance   int          `json:"matchAttendance"`
 	Matchday          Matchday     `json:"matchday"`
-	PlayerEvents      PlayerEvents `json:"playerEvents"`
+	PlayerEvents      PlayerEvents `json:"playerEvents,omitEmpty"`
 	Referees          []Referees   `json:"referees"`
 	Round             Round        `json:"round"`
-	Score             Score        `json:"score"`
+	Score             Score        `json:"score,omitEmpty"`
 	SeasonYear        string       `json:"seasonYear"`
 	SessionNumber     int          `json:"sessionNumber"`
 	Stadium           Stadium      `json:"stadium"`
@@ -706,6 +706,31 @@ func compareNewInfos(currentMap, previousMap map[string]MatchInfo) []MatchEvent 
 			label := fmt.Sprintf("Match %s : %s started", currentMatch.HomeTeam.InternationalName, currentMatch.AwayTeam.InternationalName)
 			newEvent := MatchEvent{
 				Event: START,
+				Label: label,
+			}
+			events = append(events, newEvent)
+		}
+
+		if currentMatch.PlayerEvents.Scorers == nil {
+			continue
+		}
+
+		previousScorers := 0
+		if previous.PlayerEvents.Scorers != nil {
+			previousScorers = len(previous.PlayerEvents.Scorers)
+		}
+		currentScorers := len(currentMatch.PlayerEvents.Scorers)
+
+		if previousScorers == currentScorers {
+			continue
+		}
+
+		newScorers := currentMatch.PlayerEvents.Scorers[previousScorers:currentScorers]
+
+		for _, scorer := range newScorers {
+			label := fmt.Sprintf("GOAL!!! %s %d:%d", scorer.Player.InternationalName, scorer.TotalScore.Home, scorer.TotalScore.Away)
+			newEvent := MatchEvent{
+				Event: GOAL,
 				Label: label,
 			}
 			events = append(events, newEvent)

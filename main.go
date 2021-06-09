@@ -22,11 +22,12 @@ func monitorMatches(previousMatches map[string]MatchInfo) map[string]MatchInfo {
 
 func processEvents(events []MatchEvent) {
 	if len(events) == 0 {
+		log.Println("Nothing new")
 		return
 	}
 
 	for _, event := range events {
-		log.Printf("New event %d: label: %s", event.Event, event.Label)
+		log.Printf("New event %d: label: %s\n", event.Event, event.Label)
 	}
 }
 
