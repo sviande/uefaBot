@@ -339,6 +339,135 @@ type Match struct {
 		} `json:"translations"`
 		Type string `json:"type"`
 	} `json:"matchday"`
+	PlayerEvents struct {
+		Scorers []struct {
+			GoalType string `json:"goalType"`
+			ID       string `json:"id"`
+			Images   struct {
+				PlayerCelebrating string `json:"PLAYER_CELEBRATING"`
+			} `json:"images"`
+			Player struct {
+				Age                   string `json:"age"`
+				BirthDate             string `json:"birthDate"`
+				CountryCode           string `json:"countryCode"`
+				DetailedFieldPosition string `json:"detailedFieldPosition"`
+				FieldPosition         string `json:"fieldPosition"`
+				Height                int64  `json:"height"`
+				ID                    string `json:"id"`
+				ImageURL              string `json:"imageUrl"`
+				InternationalName     string `json:"internationalName"`
+				Translations          struct {
+					CountryName struct {
+						Az string `json:"AZ"`
+						Da string `json:"DA"`
+						De string `json:"DE"`
+						En string `json:"EN"`
+						Es string `json:"ES"`
+						Fr string `json:"FR"`
+						Hu string `json:"HU"`
+						It string `json:"IT"`
+						Ja string `json:"JA"`
+						Nl string `json:"NL"`
+						Pt string `json:"PT"`
+						Ro string `json:"RO"`
+						Ru string `json:"RU"`
+						Zh string `json:"ZH"`
+					} `json:"countryName"`
+					FieldPosition struct {
+						Az string `json:"AZ"`
+						Da string `json:"DA"`
+						De string `json:"DE"`
+						En string `json:"EN"`
+						Es string `json:"ES"`
+						Fr string `json:"FR"`
+						Hu string `json:"HU"`
+						It string `json:"IT"`
+						Ja string `json:"JA"`
+						Nl string `json:"NL"`
+						Pt string `json:"PT"`
+						Ro string `json:"RO"`
+						Ru string `json:"RU"`
+						Zh string `json:"ZH"`
+					} `json:"fieldPosition"`
+					FirstName struct {
+						Az string `json:"AZ"`
+						Da string `json:"DA"`
+						De string `json:"DE"`
+						En string `json:"EN"`
+						Es string `json:"ES"`
+						Fr string `json:"FR"`
+						Hu string `json:"HU"`
+						It string `json:"IT"`
+						Ja string `json:"JA"`
+						Nl string `json:"NL"`
+						Pt string `json:"PT"`
+						Ro string `json:"RO"`
+						Ru string `json:"RU"`
+						Zh string `json:"ZH"`
+					} `json:"firstName"`
+					LastName struct {
+						Az string `json:"AZ"`
+						Da string `json:"DA"`
+						De string `json:"DE"`
+						En string `json:"EN"`
+						Es string `json:"ES"`
+						Fr string `json:"FR"`
+						Hu string `json:"HU"`
+						It string `json:"IT"`
+						Ja string `json:"JA"`
+						Nl string `json:"NL"`
+						Pt string `json:"PT"`
+						Ro string `json:"RO"`
+						Ru string `json:"RU"`
+						Zh string `json:"ZH"`
+					} `json:"lastName"`
+					Name struct {
+						Az string `json:"AZ"`
+						Da string `json:"DA"`
+						De string `json:"DE"`
+						En string `json:"EN"`
+						Es string `json:"ES"`
+						Fr string `json:"FR"`
+						Hu string `json:"HU"`
+						It string `json:"IT"`
+						Ja string `json:"JA"`
+						Nl string `json:"NL"`
+						Pt string `json:"PT"`
+						Ro string `json:"RO"`
+						Ru string `json:"RU"`
+						Zh string `json:"ZH"`
+					} `json:"name"`
+					ShortName struct {
+						Az string `json:"AZ"`
+						Da string `json:"DA"`
+						De string `json:"DE"`
+						En string `json:"EN"`
+						Es string `json:"ES"`
+						Fr string `json:"FR"`
+						Hu string `json:"HU"`
+						It string `json:"IT"`
+						Ja string `json:"JA"`
+						Nl string `json:"NL"`
+						Pt string `json:"PT"`
+						Ro string `json:"RO"`
+						Ru string `json:"RU"`
+						Zh string `json:"ZH"`
+					} `json:"shortName"`
+				} `json:"translations"`
+				Weight int64 `json:"weight"`
+			} `json:"player"`
+			TeamID         string `json:"teamId"`
+			TeamIDProvider string `json:"teamIdProvider"`
+			Time           struct {
+				Minute int64 `json:"minute"`
+				Second int64 `json:"second"`
+			} `json:"time"`
+			TotalScore struct {
+				Away int64 `json:"away"`
+				Home int64 `json:"home"`
+			} `json:"totalScore"`
+		} `json:"scorers"`
+	} `json:"playerEvents"`
 	Referees []struct {
 		Images struct {
 			SmallSquare string `json:"SMALL_SQUARE"`
