@@ -3,7 +3,7 @@ package main
 import "time"
 
 //Match struct
-type Match []struct {
+type Match struct {
 	AwayTeam struct {
 		AssociationLogoURL string `json:"associationLogoUrl"`
 		BigLogoURL         string `json:"bigLogoUrl"`
