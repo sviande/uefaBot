@@ -43,6 +43,7 @@ func main() {
 
 	ticker := time.NewTicker(1 * time.Minute)
 	go func() {
+		previousMatches = monitorMatches(previousMatches)
 		for {
 			select {
 			case <-ticker.C:
