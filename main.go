@@ -8,8 +8,8 @@ import (
 	"time"
 )
 
-func updateMatches(matchEventChan chan MatchEvent, previousMatches map[string]MatchInfo) map[string]MatchInfo {
-	currentMatches, err := fetchMatches()
+func updateMatches(competitionID string, matchEventChan chan MatchEvent, previousMatches map[string]MatchInfo) map[string]MatchInfo {
+	currentMatches, err := fetchMatches(competitionID)
 	if err != nil {
 		log.Printf("Fetch failed, %v", err)
 		return previousMatches
@@ -23,14 +23,14 @@ func updateMatches(matchEventChan chan MatchEvent, previousMatches map[string]Ma
 	return currentMatches
 }
 
-func monitorMatches(matchEventChan chan MatchEvent) {
+func monitorMatches(matchEventChan chan MatchEvent, competitionID string) {
 	ticker := time.NewTicker(1 * time.Minute)
 	previousMatches := make(map[string]MatchInfo)
-	previousMatches = updateMatches(matchEventChan, previousMatches)
+	previousMatches = updateMatches(competitionID, matchEventChan, previousMatches)
 	for {
 		select {
 		case <-ticker.C:
-			previousMatches = updateMatches(matchEventChan, previousMatches)
+			previousMatches = updateMatches(competitionID, matchEventChan, previousMatches)
 		}
 	}
 }
@@ -48,6 +48,8 @@ func main() {
 		log.Fatal("Missing env var WEBHOOK_URL")
 	}
 
+	competitionID := os.Getenv("COMPETITION_ID")
+
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
@@ -61,7 +63,7 @@ func main() {
 	slack.sendMessage("🔥Bot is up")
 
 	matchEventChan := make(chan MatchEvent, 10)
-	go monitorMatches(matchEventChan)
+	go monitorMatches(matchEventChan, competitionID)
 	go sendSlackMessages(slack, matchEventChan)
 
 	<-c
