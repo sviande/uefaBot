@@ -8,7 +8,7 @@ A simple tool that check update  on match and send you a slack message.
 If you have any feedback, please reach out to us at https://twitter.com/sviande/
 
   
-## Installation (Development)
+## Installation
 
 First install Go.
 
