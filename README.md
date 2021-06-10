@@ -7,6 +7,10 @@ A simple tool that check update  on match and send you a slack message.
 
 If you have any feedback, please reach out to us at https://twitter.com/sviande/
 
+## Dependencies
+
+You need a slack Webhook URL, you can follow [the slack guide to create an app](https://api.slack.com/messaging/webhooks)
+
   
 ## Installation
 
@@ -20,9 +24,13 @@ GOBIN=$(pwd) GOPATH=$(mktemp -d) go get github.com/sviande/uefaBot
     
 ## Run
 
---competitionId=3 Euro 2021
+### Monitor all UEFA matches
 ```bash
-  WEBHOOK_URL=https://hooks.slack.com/service/XXXXXXXX/XXXXXX uefaBot --competitionId=3
+  WEBHOOK_URL=https://hooks.slack.com/service/XXXXXXXX/XXXXXX uefaBot
+```
+### Monitor EURO 2021
+```bash
+  WEBHOOK_URL=https://hooks.slack.com/service/XXXXXXXX/XXXXXX uefaBot -competionId=3
 ```
 
 ## License
