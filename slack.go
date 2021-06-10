@@ -8,7 +8,7 @@ import (
 )
 
 type Slack struct {
-	HookURL string
+	hookURL string
 }
 
 type SlackMessage struct {
@@ -25,7 +25,7 @@ func (s Slack) sendMessage(text string) {
 		return
 	}
 
-	req, err := http.NewRequest("POST", s.HookURL, bytes.NewBuffer(requestBody))
+	req, err := http.NewRequest("POST", s.hookURL, bytes.NewBuffer(requestBody))
 	if err != nil {
 		log.Println("Failed to create slack request")
 		return
