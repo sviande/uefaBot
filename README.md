@@ -12,8 +12,11 @@ If you have any feedback, please reach me on [twitter](https://twitter.com/svian
 
 You need a slack Webhook URL, you can follow [the slack guide to create an app](https://api.slack.com/messaging/webhooks)
 
-  
-## Installation
+## Installation (standalone)
+
+Fetch you binary from [the latest release](https://github.com/sviande/uefaBot/releases/latest)
+
+## Installation (with go)
 
 First install [Go](https://golang.org/doc/install).
 
@@ -22,7 +25,7 @@ If you just want to install the binary to your current directory and don't care 
 ```bash
 GOBIN=$(pwd) GOPATH=$(mktemp -d) go get github.com/sviande/uefaBot
 ```
-    
+
 ## Run
 
 ### Monitor all UEFA matches
@@ -37,5 +40,3 @@ GOBIN=$(pwd) GOPATH=$(mktemp -d) go get github.com/sviande/uefaBot
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
-
-  
