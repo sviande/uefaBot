@@ -14,7 +14,7 @@ You need a slack Webhook URL, you can follow [the slack guide to create an app](
   
 ## Installation
 
-First install Go.
+First install [Go](https://golang.org/doc/install).
 
 If you just want to install the binary to your current directory and don't care about the source code, run
 
