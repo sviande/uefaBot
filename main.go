@@ -14,7 +14,7 @@ func monitorMatches(previousMatches map[string]MatchInfo) map[string]MatchInfo {
 		log.Printf("Monitor failed, %v", err)
 	}
 
-	newEvents := compareNewInfos(previousMatches, currentMatches)
+	newEvents := compareNewInfos(currentMatches, previousMatches)
 	processEvents(newEvents)
 
 	return currentMatches
