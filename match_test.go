@@ -21,7 +21,7 @@ func TestCompareNewInfosMatchLive(t *testing.T) {
 	}
 	got := compareNewInfos(current, previous)
 	expected := []MatchEvent{
-		{START, "Match homeTeam : awayTeam started"},
+		{START, "🏆Match homeTeam : awayTeam started"},
 	}
 
 	if got[0].Event != expected[0].Event {
@@ -38,6 +38,12 @@ func TestCompareNewInfosMatchPlayerScore(t *testing.T) {
 	current["test"] = MatchInfo{
 		ID:     "test",
 		Status: MatchLive,
+		HomeTeam: HomeTeam{
+			InternationalName: "hometeam",
+		},
+		AwayTeam: AwayTeam{
+			InternationalName: "awayteam",
+		},
 		PlayerEvents: PlayerEvents{
 			Scorers: []Scorers{
 				{
@@ -60,7 +66,7 @@ func TestCompareNewInfosMatchPlayerScore(t *testing.T) {
 	}
 	got := compareNewInfos(current, previous)
 	expected := []MatchEvent{
-		{GOAL, "GOAL!!! testPlayer 1:0"},
+		{GOAL, "⚽ testPlayer hometeam 1:0 awayteam"},
 	}
 
 	if got[0].Event != expected[0].Event {

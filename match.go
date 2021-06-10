@@ -706,7 +706,7 @@ func compareNewInfos(currentMap, previousMap map[string]MatchInfo) []MatchEvent 
 		}
 
 		if previous.Status == MatchUpcoming && currentMatch.Status == MatchLive {
-			label := fmt.Sprintf("Match %s : %s started", currentMatch.HomeTeam.InternationalName, currentMatch.AwayTeam.InternationalName)
+			label := fmt.Sprintf("🏆Match %s : %s started", currentMatch.HomeTeam.InternationalName, currentMatch.AwayTeam.InternationalName)
 			newEvent := MatchEvent{
 				Event: START,
 				Label: label,
@@ -731,7 +731,15 @@ func compareNewInfos(currentMap, previousMap map[string]MatchInfo) []MatchEvent 
 		newScorers := currentMatch.PlayerEvents.Scorers[previousScorers:currentScorers]
 
 		for _, scorer := range newScorers {
-			label := fmt.Sprintf("GOAL!!! %s %d:%d", scorer.Player.InternationalName, scorer.TotalScore.Home, scorer.TotalScore.Away)
+			label := fmt.Sprintf(
+				"⚽ %s %s %d:%d %s",
+				scorer.Player.InternationalName,
+				currentMatch.HomeTeam.InternationalName,
+				scorer.TotalScore.Home,
+				scorer.TotalScore.Away,
+				currentMatch.AwayTeam.InternationalName,
+			)
+
 			newEvent := MatchEvent{
 				Event: GOAL,
 				Label: label,
