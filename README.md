@@ -1,5 +1,6 @@
 
 # UEFA slack bot
+[![Go](https://github.com/sviande/uefaBot/actions/workflows/go.yml/badge.svg)](https://github.com/sviande/uefaBot/actions/workflows/go.yml)
 
 A simple tool that check update  on match and send you a slack message.
 
