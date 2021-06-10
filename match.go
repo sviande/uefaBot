@@ -644,7 +644,7 @@ type Winner struct {
 	Match Match `json:"match"`
 }
 
-func fetchMatches(competitionId string) (map[string]MatchInfo, error) {
+func fetchMatches(competitionID string) (map[string]MatchInfo, error) {
 	params := url.Values{}
 	today := time.Now()
 	dateLayout := "2006-01-02"
@@ -653,8 +653,8 @@ func fetchMatches(competitionId string) (map[string]MatchInfo, error) {
 	params.Add("toDate", tomorrow.Format(dateLayout))
 	params.Add("offset", "0")
 	params.Add("limit", "100")
-	if competitionId != "" {
-		params.Add("competitionId", competitionId)
+	if competitionID != "" {
+		params.Add("competitionId", competitionID)
 	}
 	resp, err := http.Get("https://match.uefa.com/v2/matches?" + params.Encode())
 

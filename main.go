@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"os"
 	"os/signal"
@@ -48,7 +49,9 @@ func main() {
 		log.Fatal("Missing env var WEBHOOK_URL")
 	}
 
-	competitionID := os.Getenv("COMPETITION_ID")
+	competitionID := ""
+	flag.StringVar(&competitionID, "competitionId", "", "UEFA competionId to monitor. Find all competions at https://comp.uefa.com/v1/competitions")
+	flag.Parse()
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
