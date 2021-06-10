@@ -717,6 +717,21 @@ func compareNewInfos(currentMap, previousMap map[string]MatchInfo) []MatchEvent 
 			events = append(events, newEvent)
 		}
 
+		if previous.Status == MatchLive && currentMatch.Status == MatchFinished {
+			label := fmt.Sprintf(
+				"🏆Match %s %d : %d %s finished",
+				currentMatch.HomeTeam.InternationalName,
+				currentMatch.Score.Regular.Home,
+				currentMatch.Score.Regular.Away,
+				currentMatch.AwayTeam.InternationalName,
+			)
+			newEvent := MatchEvent{
+				Event: END,
+				Label: label,
+			}
+			events = append(events, newEvent)
+		}
+
 		if currentMatch.PlayerEvents.Scorers == nil {
 			continue
 		}

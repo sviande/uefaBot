@@ -33,6 +33,43 @@ func TestCompareNewInfosMatchLive(t *testing.T) {
 	}
 }
 
+func TestCompareNewInfosMatchEnd(t *testing.T) {
+	current := make(map[string]MatchInfo)
+	current["test"] = MatchInfo{
+		ID: "test",
+		AwayTeam: AwayTeam{
+			InternationalName: "awayTeam",
+		},
+		HomeTeam: HomeTeam{
+			InternationalName: "homeTeam",
+		},
+		Score: Score{
+			Regular: Regular{
+				Away: 0,
+				Home: 3,
+			},
+		},
+		Status: MatchFinished,
+	}
+	previous := make(map[string]MatchInfo)
+	previous["test"] = MatchInfo{
+		ID:     "test",
+		Status: MatchLive,
+	}
+	got := compareNewInfos(current, previous)
+	expected := []MatchEvent{
+		{END, "🏆Match homeTeam 3 : 0 awayTeam finished"},
+	}
+
+	if got[0].Event != expected[0].Event {
+		t.Errorf("CompareNewInfos = %d; want %d", got[0].Event, expected[0].Event)
+	}
+
+	if got[0].Label != expected[0].Label {
+		t.Errorf("CompareNewInfos = %s; want %s", got[0].Label, expected[0].Label)
+	}
+}
+
 func TestCompareNewInfosMatchPlayerScore(t *testing.T) {
 	current := make(map[string]MatchInfo)
 	current["test"] = MatchInfo{
