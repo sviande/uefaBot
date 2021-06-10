@@ -5,7 +5,7 @@ A simple tool that check update  on match and send you a slack message.
 
 ## Feedback
 
-If you have any feedback, please reach out to us at https://twitter.com/sviande/
+If you have any feedback, please reach me on [twitter](https://twitter.com/sviande/)
 
 ## Dependencies
 
