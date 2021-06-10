@@ -63,11 +63,16 @@ func main() {
 	slack := Slack{
 		hookURL: webHookURL,
 	}
-	slack.sendMessage("🔥Bot is up")
 
 	matchEventChan := make(chan MatchEvent, 10)
 	go monitorMatches(matchEventChan, competitionID)
 	go sendSlackMessages(slack, matchEventChan)
+
+	slack.sendMessage("🔥Bot is up")
+	log.Println("Bot is up and running")
+	if competitionID != "" {
+		log.Printf("Monitoring competitionId %s\n", competitionID)
+	}
 
 	<-c
 	close(matchEventChan)
