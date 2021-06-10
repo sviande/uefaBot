@@ -37,6 +37,10 @@ GOBIN=$(pwd) GOPATH=$(mktemp -d) go get github.com/sviande/uefaBot
   WEBHOOK_URL=https://hooks.slack.com/service/XXXXXXXX/XXXXXX uefaBot -competionId=3
 ```
 
+## Preview
+![Screen Shot 2021-06-10 at 13 24 28](https://user-images.githubusercontent.com/1902504/121517369-94751580-c9ef-11eb-9521-a57102458938.png)
+![Screen Shot 2021-06-10 at 13 25 27](https://user-images.githubusercontent.com/1902504/121517437-a8b91280-c9ef-11eb-949f-8d49dcdfdda4.png)
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
