@@ -114,3 +114,182 @@ func TestCompareNewInfosMatchPlayerScore(t *testing.T) {
 		t.Errorf("CompareNewInfos = %s; want %s", got[0].Label, expected[0].Label)
 	}
 }
+
+func TestCompareNewInfosRollback(t *testing.T) {
+	current := make(map[string]MatchInfo)
+	current["test"] = MatchInfo{
+		ID:     "test",
+		Status: MatchLive,
+		HomeTeam: HomeTeam{
+			InternationalName: "hometeam",
+		},
+		AwayTeam: AwayTeam{
+			InternationalName: "awayteam",
+		},
+		PlayerEvents: PlayerEvents{
+			Scorers: []Scorers{
+				{
+					Player: Player{
+						InternationalName: "testPlayer",
+					},
+					TotalScore: TotalScore{
+						Away: 0,
+						Home: 1,
+					},
+				},
+			},
+		},
+	}
+	previous := make(map[string]MatchInfo)
+	previous["test"] = MatchInfo{
+		ID:     "test",
+		Status: MatchLive,
+		PlayerEvents: PlayerEvents{
+			Scorers: []Scorers{
+				{
+					Player: Player{
+						InternationalName: "testPlayer",
+					},
+					TotalScore: TotalScore{
+						Away: 0,
+						Home: 1,
+					},
+				},
+				{
+					Player: Player{
+						InternationalName: "testPlayer",
+					},
+					TotalScore: TotalScore{
+						Away: 0,
+						Home: 2,
+					},
+				},
+			},
+		},
+	}
+	got := compareNewInfos(current, previous)
+	expected := []MatchEvent{
+		{GOAL, "⚽ Cancelled hometeam 1:0 awayteam"},
+	}
+
+	if got[0].Event != expected[0].Event {
+		t.Errorf("CompareNewInfos = %d; want %d", got[0].Event, expected[0].Event)
+	}
+
+	if got[0].Label != expected[0].Label {
+		t.Errorf("CompareNewInfos = %s; want %s", got[0].Label, expected[0].Label)
+	}
+}
+
+func TestCompareNewInfosRollbackPrevious(t *testing.T) {
+	current := make(map[string]MatchInfo)
+	current["test"] = MatchInfo{
+		ID:     "test",
+		Status: MatchLive,
+		HomeTeam: HomeTeam{
+			InternationalName: "hometeam",
+		},
+		AwayTeam: AwayTeam{
+			InternationalName: "awayteam",
+		},
+		PlayerEvents: PlayerEvents{
+			Scorers: []Scorers{
+				{
+					Player: Player{
+						InternationalName: "testPlayer",
+					},
+					TotalScore: TotalScore{
+						Away: 0,
+						Home: 1,
+					},
+				},
+			},
+		},
+	}
+	previous := make(map[string]MatchInfo)
+	previous["test"] = MatchInfo{
+		ID:     "test",
+		Status: MatchLive,
+		PlayerEvents: PlayerEvents{
+			Scorers: []Scorers{
+				{
+					Player: Player{
+						InternationalName: "testPlayer",
+					},
+					TotalScore: TotalScore{
+						Away: 0,
+						Home: 1,
+					},
+				},
+				{
+					Player: Player{
+						InternationalName: "testPlayer",
+					},
+					TotalScore: TotalScore{
+						Away: 0,
+						Home: 2,
+					},
+				},
+			},
+		},
+	}
+	got := compareNewInfos(current, previous)
+	expected := []MatchEvent{
+		{GOAL, "⚽ Cancelled hometeam 1:0 awayteam"},
+	}
+
+	if got[0].Event != expected[0].Event {
+		t.Errorf("CompareNewInfos = %d; want %d", got[0].Event, expected[0].Event)
+	}
+
+	if got[0].Label != expected[0].Label {
+		t.Errorf("CompareNewInfos = %s; want %s", got[0].Label, expected[0].Label)
+	}
+}
+
+func TestCompareNewInfosRollbackPreviousNoGoal(t *testing.T) {
+	current := make(map[string]MatchInfo)
+	current["test"] = MatchInfo{
+		ID:     "test",
+		Status: MatchLive,
+		HomeTeam: HomeTeam{
+			InternationalName: "hometeam",
+		},
+		AwayTeam: AwayTeam{
+			InternationalName: "awayteam",
+		},
+		PlayerEvents: PlayerEvents{
+			Scorers: []Scorers{},
+		},
+	}
+	previous := make(map[string]MatchInfo)
+	previous["test"] = MatchInfo{
+		ID:     "test",
+		Status: MatchLive,
+		PlayerEvents: PlayerEvents{
+			Scorers: []Scorers{
+				{
+					Player: Player{
+						InternationalName: "testPlayer",
+					},
+					TotalScore: TotalScore{
+						Away: 0,
+						Home: 1,
+					},
+				},
+			},
+		},
+	}
+	got := compareNewInfos(current, previous)
+	expected := []MatchEvent{
+		{GOAL, "⚽ Cancelled hometeam 0:0 awayteam"},
+	}
+
+	if got[0].Event != expected[0].Event {
+		t.Errorf("CompareNewInfos = %d; want %d", got[0].Event, expected[0].Event)
+	}
+
+	if got[0].Label != expected[0].Label {
+		t.Errorf("CompareNewInfos = %s; want %s", got[0].Label, expected[0].Label)
+	}
+}

@@ -746,6 +746,36 @@ func compareNewInfos(currentMap, previousMap map[string]MatchInfo) []MatchEvent 
 			continue
 		}
 
+		if previousScorers > currentScorers {
+			label := fmt.Sprintf(
+				"⚽ %s %s %d:%d %s",
+				"Cancelled",
+				currentMatch.HomeTeam.InternationalName,
+				0,
+				0,
+				currentMatch.AwayTeam.InternationalName,
+			)
+
+			if currentScorers > 0 {
+				lastScorer := currentMatch.PlayerEvents.Scorers[currentScorers-1]
+				label = fmt.Sprintf(
+					"⚽ %s %s %d:%d %s",
+					"Cancelled",
+					currentMatch.HomeTeam.InternationalName,
+					lastScorer.TotalScore.Home,
+					lastScorer.TotalScore.Away,
+					currentMatch.AwayTeam.InternationalName,
+				)
+			}
+
+			newEvent := MatchEvent{
+				Event: GOAL,
+				Label: label,
+			}
+			events = append(events, newEvent)
+			continue
+		}
+
 		newScorers := currentMatch.PlayerEvents.Scorers[previousScorers:currentScorers]
 
 		for _, scorer := range newScorers {
