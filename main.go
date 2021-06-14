@@ -2,12 +2,15 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 )
+
+var appVersion = "development"
 
 func updateMatches(competitionID string, matchEventChan chan MatchEvent, previousMatches map[string]MatchInfo) map[string]MatchInfo {
 	currentMatches, err := fetchMatches(competitionID)
@@ -68,8 +71,9 @@ func main() {
 	go monitorMatches(matchEventChan, competitionID)
 	go sendSlackMessages(slack, matchEventChan)
 
-	slack.sendMessage("🔥Bot is up")
-	log.Println("Bot is up and running")
+	upMessage := fmt.Sprintf("🔥Bot is up and running (v%s)", appVersion)
+	slack.sendMessage(upMessage)
+	log.Println(upMessage)
 	if competitionID != "" {
 		log.Printf("Monitoring competitionId %s\n", competitionID)
 	}
